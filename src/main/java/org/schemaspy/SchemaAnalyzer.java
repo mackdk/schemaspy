@@ -111,7 +111,7 @@ public class SchemaAnalyzer {
         // don't render console-based detail unless we're generating HTML (those probably don't have a user watching)
         // and not already logging fine details (to keep from obfuscating those)
 
-        boolean render = config.isHtmlGenerationEnabled();
+        boolean render = config.isConsoleProgressEnabled() && config.isHtmlGenerationEnabled();
         ProgressListener progressListener = new ConsoleProgressListener(render, commandLineArguments);
 
         // if -all(evaluteAll) or -schemas given then analyzeMultipleSchemas

@@ -117,6 +117,7 @@ public final class Config implements HtmlConfig, GraphvizConfig {
     private PropertiesResolver propertiesResolver = new PropertiesResolver();
     private Properties dbProperties;
     private Boolean generateHtml;
+    private Boolean consoleProgress;
     private Boolean includeImpliedConstraints;
     private Boolean rankDirBugEnabled;
     private Boolean numRowsEnabled;
@@ -199,6 +200,13 @@ public final class Config implements HtmlConfig, GraphvizConfig {
             generateHtml = !options.remove("-nohtml");
 
         return generateHtml;
+    }
+
+    public boolean isConsoleProgressEnabled() {
+        if (consoleProgress == null)
+            consoleProgress = !options.remove("-noconsoleprogress");
+
+        return consoleProgress;
     }
 
     public boolean isImpliedConstraintsEnabled() {
@@ -1514,6 +1522,8 @@ public final class Config implements HtmlConfig, GraphvizConfig {
             params.add("-all");
         if (!isHtmlGenerationEnabled())
             params.add("-nohtml");
+        if (!isConsoleProgressEnabled())
+            params.add("-noconsoleprogress");
         if (!isImpliedConstraintsEnabled())
             params.add("-noimplied");
         if (!isNumRowsEnabled())
