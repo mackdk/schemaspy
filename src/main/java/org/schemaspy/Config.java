@@ -121,6 +121,8 @@ public final class Config implements HtmlConfig, GraphvizConfig {
     private Boolean rankDirBugEnabled;
     private Boolean numRowsEnabled;
     private Boolean viewsEnabled;
+    private Boolean hideAnomaliesEnabled;
+    private Boolean hideOrphanTablesEnabled;
     private Boolean railsEnabled;
     private Boolean evaluateAll;
     private Boolean highQuality;
@@ -782,6 +784,28 @@ public final class Config implements HtmlConfig, GraphvizConfig {
             viewsEnabled = !options.remove("-noviews");
 
         return viewsEnabled;
+    }
+
+    public void setHideAnomaliesEnabled(boolean enabled) {
+        this.hideAnomaliesEnabled = enabled;
+    }
+
+    public boolean isHideAnomaliesEnabled() {
+        if (hideAnomaliesEnabled == null)
+            hideAnomaliesEnabled = options.remove("-noanomalies");
+
+        return hideAnomaliesEnabled;
+    }
+
+    public void setHideOrphanTablesEnabled(Boolean hideOrphanTablesEnabledIn) {
+        this.hideOrphanTablesEnabled = hideOrphanTablesEnabledIn;
+    }
+
+    public boolean isHideOrphanTablesEnabled() {
+        if (hideOrphanTablesEnabled == null)
+            hideOrphanTablesEnabled = options.remove("-noorphantables");
+
+        return hideOrphanTablesEnabled;
     }
 
     /**
@@ -1504,6 +1528,10 @@ public final class Config implements HtmlConfig, GraphvizConfig {
             params.add("-rankdirbug");
         if (isRailsEnabled())
             params.add("-rails");
+        if (isHideAnomaliesEnabled())
+            params.add("-noanomalies");
+        if (isHideOrphanTablesEnabled())
+            params.add("-noorphantables");
         if (isSingleSignOn())
             params.add("-sso");
 

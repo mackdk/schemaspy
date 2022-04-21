@@ -23,6 +23,7 @@
  */
 package org.schemaspy.view;
 
+import org.schemaspy.Config;
 import org.schemaspy.DbAnalyzer;
 import org.schemaspy.model.Database;
 import org.schemaspy.model.ForeignKeyConstraint;
@@ -73,11 +74,15 @@ public class HtmlMainIndexPage {
             mustacheTables.add(mustacheTable);
         }
 
+        Config config = Config.getInstance();
+
         long tablesAmount = tables.stream().filter(t -> !t.isView()).count();
         long viewsAmount = tables.stream().filter(Table::isView).count();
         long constraintsAmount = DbAnalyzer.getForeignKeyConstraints(tables).size();
         long routinesAmount = database.getRoutines().size();
         long anomaliesAmount = getAllAnomaliesAmount(tables, impliedConstraints);
+        boolean hideAnomalies = config.isHideAnomaliesEnabled();
+        boolean hideOrphans = config.isHideOrphanTablesEnabled();
 
         PageData pageData = new PageData.Builder()
                 .templateName("main.html")
@@ -94,6 +99,8 @@ public class HtmlMainIndexPage {
                 .addToScope("schema", new MustacheSchema(database.getSchema(), ""))
                 .addToScope("catalog", new MustacheCatalog(database.getCatalog(), ""))
                 .addToScope("xmlName", getXmlName(database))
+                .addToScope("isHideAnomalies", hideAnomalies)
+                .addToScope("isHideOrphans", hideOrphans)
                 .depth(0)
                 .getPageData();
 

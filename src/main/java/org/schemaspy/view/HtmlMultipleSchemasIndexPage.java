@@ -22,6 +22,7 @@
  */
 package org.schemaspy.view;
 
+import org.schemaspy.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,8 @@ public class HtmlMultipleSchemasIndexPage {
 
         String connectTime = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("EEE MMM dd HH:mm z yyyy"));
 
+        Config config = Config.getInstance();
+
         PageData pageData = new PageData.Builder()
                 .templateName("multi.html")
                 .addToScope("description", description)
@@ -63,6 +66,8 @@ public class HtmlMultipleSchemasIndexPage {
                 .addToScope("catalog", catalog)
                 .addToScope("schemasNumber", Integer.toString(schemas.size()))
                 .addToScope("isMultipleSchemas", true)
+                .addToScope("isHideAnomalies", config.isHideAnomaliesEnabled())
+                .addToScope("isHideOrphans", config.isHideOrphanTablesEnabled())
                 .getPageData();
 
         try {
