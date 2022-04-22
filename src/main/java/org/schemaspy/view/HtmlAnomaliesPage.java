@@ -35,6 +35,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -57,19 +58,20 @@ public class HtmlAnomaliesPage {
     }
 
     public void write(
-            Collection<Table> tables,
-            List<? extends ForeignKeyConstraint> impliedConstraints,
-            Writer writer
+        Collection<Table> tables,
+        List<? extends ForeignKeyConstraint> impliedConstraints,
+        Map<String, Object> parametersMap, Writer writer
     ) {
-        List<Table> unIndexedTables = DbAnalyzer.getTablesWithoutIndexes(new HashSet<Table>(tables));
+        List<Table> unIndexedTables = DbAnalyzer.getTablesWithoutIndexes(new HashSet<>(tables));
         List<ForeignKeyConstraint> impliedConstraintColumns = impliedConstraints.stream().filter(c -> !c.getChildTable().isView()).collect(Collectors.toList());
         List<Table> oneColumnTables = DbAnalyzer.getTablesWithOneColumn(tables).stream().filter(t -> !t.isView()).collect(Collectors.toList());
         List<Table> incrementingColumnNames =  DbAnalyzer.getTablesWithIncrementingColumnNames(tables).stream().filter(t -> !t.isView()).collect(Collectors.toList());
-        List<TableColumn> uniqueNullables = DbAnalyzer.getDefaultNullStringColumns(new HashSet<Table>(tables));
+        List<TableColumn> uniqueNullables = DbAnalyzer.getDefaultNullStringColumns(new HashSet<>(tables));
 
         PageData pageData = new PageData.Builder()
                 .templateName("anomalies.html")
                 .scriptName("anomalies.js")
+                .addAllToScope(parametersMap)
                 .addToScope("impliedConstraints", impliedConstraintColumns)
                 .addToScope("unIndexedTables", unIndexedTables)
                 .addToScope("oneColumnTables", oneColumnTables)

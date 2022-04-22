@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.invoke.MethodHandles;
+import java.util.Map;
 
 /**
  * @author Daniel Watt
@@ -42,10 +43,11 @@ public class HtmlRoutinePage {
         this.mustacheCompiler = mustacheCompiler;
     }
 
-    public void write(Routine routine, Writer writer) {
+    public void write(Routine routine, Map<String, Object> parametersMap, Writer writer) {
         PageData pageData = new PageData.Builder()
                 .templateName("routines/routine.html")
                 .scriptName("routine.js")
+                .addAllToScope(parametersMap)
                 .addToScope("routineName", routine.getName())
                 .addToScope("routineComment", Markdown.toHtml(routine.getComment(), mustacheCompiler.getRootPath(1)))
                 .addToScope("routineParameters",routine.getParameters())

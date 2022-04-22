@@ -59,7 +59,7 @@ public class HtmlTablePage {
         this.sqlAnalyzer = sqlAnalyzer;
     }
 
-    public void write(Table table, List<MustacheTableDiagram> diagrams, Writer writer) {
+    public void write(Table table, List<MustacheTableDiagram> diagrams, Map<String, Object> parametersMap, Writer writer) {
         Set<TableColumn> primaries = new LinkedHashSet<>(table.getPrimaryColumns());
         Set<TableColumn> indexes = new HashSet<>();
         Set<MustacheTableColumn> tableColumns = new LinkedHashSet<>();
@@ -83,6 +83,7 @@ public class HtmlTablePage {
         PageData pageData = new PageData.Builder()
                 .templateName("tables/table.html")
                 .scriptName("table.js")
+                .addAllToScope(parametersMap)
                 .addToScope("table", table)
                 .addToScope("comments", Markdown.toHtml(table.getComments(), mustacheCompiler.getRootPath(1)))
                 .addToScope("primaries", primaries)

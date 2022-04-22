@@ -64,8 +64,9 @@ public class HtmlAnomaliesPageTest {
         ForeignKeyConstraint implied = new ForeignKeyConstraint(parentColumn, childColumn);
 
         htmlAnomaliesPage.write(
-                Collections.EMPTY_LIST,
+                Collections.emptyList(),
                 Collections.singletonList(implied),
+                Collections.emptyMap(),
                 output);
         assertThat(output.toString()).contains("<td><a href='tables/childTable.html'>childTable</a>.[childColumn]</td>");
         assertThat(output.toString()).contains("<td><a href='tables/parentTable.html'>parentTable</a>.[parentColumn]</td>");
@@ -82,7 +83,8 @@ public class HtmlAnomaliesPageTest {
 
         htmlAnomaliesPage.write(
                 Collections.singletonList(table),
-                Collections.EMPTY_LIST,
+                Collections.emptyList(),
+                Collections.emptyMap(),
                 output);
         assertThat(output.toString()).contains("<td><a href='tables/hasNoIndex.html'>hasNoIndex</a></td>");
     }
@@ -110,7 +112,8 @@ public class HtmlAnomaliesPageTest {
 
         htmlAnomaliesPage.write(
                 Collections.singletonList(table),
-                Collections.EMPTY_LIST,
+                Collections.emptyList(),
+                Collections.emptyMap(),
                 output);
         assertThat(output.toString()).contains("<td><a href='tables/denormalized.html'>denormalized</a></td>");
     }
@@ -131,7 +134,8 @@ public class HtmlAnomaliesPageTest {
 
         htmlAnomaliesPage.write(
                 Collections.singletonList(table),
-                Collections.EMPTY_LIST,
+                Collections.emptyList(),
+                Collections.emptyMap(),
                 output);
         assertThat(output.toString()).contains("<td><a href='tables/hasOnlyOneColumn.html'>hasOnlyOneColumn</a></td>");
         assertThat(output.toString()).contains("<td>singleColumn</td>");
@@ -153,7 +157,8 @@ public class HtmlAnomaliesPageTest {
 
         htmlAnomaliesPage.write(
                 Collections.singletonList(table),
-                Collections.EMPTY_LIST,
+                Collections.emptyList(),
+                Collections.emptyMap(),
                 output);
         assertThat(output.toString()).contains("<td><a href='tables/defaultNullTable.html'>defaultNullTable</a>.defaultNullColumn</td>");
     }

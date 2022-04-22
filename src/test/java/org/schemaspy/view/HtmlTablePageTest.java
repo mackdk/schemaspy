@@ -47,7 +47,7 @@ public class HtmlTablePageTest {
         when(table.getName()).thenReturn("A_TABLE");
         when(table.getNumRows()).thenReturn(0L);
 
-        htmlTablePage.write(table, Collections.emptyList(), writer);
+        htmlTablePage.write(table, Collections.emptyList(), Collections.emptyMap(), writer);
 
         assertThat(writer.toString()).contains("<h1>A_TABLE</h1><p><span id=\"recordNumber\">0</span> rows</p><br />");
     }
@@ -67,7 +67,7 @@ public class HtmlTablePageTest {
         when(table.getName()).thenReturn("A_TABLE");
         when(table.getNumRows()).thenReturn(0L);
 
-        htmlTablePage.write(table, Collections.emptyList(), writer);
+        htmlTablePage.write(table, Collections.emptyList(), Collections.emptyMap(), writer);
 
         assertThat(writer.toString()).doesNotContain("<h1>A_TABLE</h1><p><span id=\"recordNumber\">0</span> rows</p><br />");
     }

@@ -44,7 +44,7 @@ public class HtmlRoutinesPageTest {
         Collection<Routine> routines = Collections.singletonList(new Routine("ARoutine", "Function", "Integer", "SQL", "SELECT 1", true, "IMMUTABLE", "INVOKER", "normal *emp* **strong**"));
         StringWriter actual = new StringWriter();
 
-        htmlRoutinesPage.write(routines, actual);
+        htmlRoutinesPage.write(routines, Collections.emptyMap(), actual);
 
         assertThat(actual.toString()).contains("<p>normal <em>emp</em> <strong>strong</strong></p>");
     }

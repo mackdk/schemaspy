@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The main index that contains all tables and views that were evaluated
@@ -61,7 +62,7 @@ public class HtmlMainIndexPage {
         this.description = description;
     }
 
-    public void write(Database database, Collection<Table> tables, List<? extends ForeignKeyConstraint> impliedConstraints, Writer writer) {
+    public void write(Collection<Table> tables, Map<String, Object> parametersMap, Writer writer) {
         List<MustacheTable> mustacheTables = new ArrayList<>();
 
         long columnsAmount = 0;
@@ -74,33 +75,12 @@ public class HtmlMainIndexPage {
             mustacheTables.add(mustacheTable);
         }
 
-        Config config = Config.getInstance();
-
-        long tablesAmount = tables.stream().filter(t -> !t.isView()).count();
-        long viewsAmount = tables.stream().filter(Table::isView).count();
-        long constraintsAmount = DbAnalyzer.getForeignKeyConstraints(tables).size();
-        long routinesAmount = database.getRoutines().size();
-        long anomaliesAmount = getAllAnomaliesAmount(tables, impliedConstraints);
-        boolean hideAnomalies = config.isHideAnomaliesEnabled();
-        boolean hideOrphans = config.isHideOrphanTablesEnabled();
-
         PageData pageData = new PageData.Builder()
                 .templateName("main.html")
                 .scriptName("main.js")
-                .addToScope("tablesAmount", tablesAmount)
-                .addToScope("viewsAmount", viewsAmount)
-                .addToScope("columnsAmount", columnsAmount)
-                .addToScope("constraintsAmount", constraintsAmount)
-                .addToScope("routinesAmount", routinesAmount)
-                .addToScope("anomaliesAmount", anomaliesAmount)
+                .addAllToScope(parametersMap)
                 .addToScope("tables", mustacheTables)
-                .addToScope("database", database)
                 .addToScope("description", Markdown.toHtml(description, ""))
-                .addToScope("schema", new MustacheSchema(database.getSchema(), ""))
-                .addToScope("catalog", new MustacheCatalog(database.getCatalog(), ""))
-                .addToScope("xmlName", getXmlName(database))
-                .addToScope("isHideAnomalies", hideAnomalies)
-                .addToScope("isHideOrphans", hideOrphans)
                 .depth(0)
                 .getPageData();
 
@@ -111,29 +91,4 @@ public class HtmlMainIndexPage {
         }
     }
 
-    private static long getAllAnomaliesAmount(Collection<Table> tables, List<? extends ForeignKeyConstraint> impliedConstraints) {
-        long anomalies = 0;
-        anomalies += DbAnalyzer.getTablesWithoutIndexes(new HashSet<>(tables)).size();
-        anomalies += impliedConstraints.stream().filter(c -> !c.getChildTable().isView()).count();
-        anomalies += DbAnalyzer.getTablesWithOneColumn(tables).stream().filter(t -> !t.isView()).count();
-        anomalies += DbAnalyzer.getTablesWithIncrementingColumnNames(tables).stream().filter(t -> !t.isView()).count();
-        anomalies += DbAnalyzer.getDefaultNullStringColumns(new HashSet<>(tables)).size();
-
-        return anomalies;
-    }
-
-    private static String getXmlName(Database db) {
-        StringBuilder description = new StringBuilder();
-
-        description.append(db.getName());
-        if (db.getSchema() != null) {
-            description.append('.');
-            description.append(db.getSchema().getName());
-        } else if (db.getCatalog() != null) {
-            description.append('.');
-            description.append(db.getCatalog().getName());
-        }
-
-        return description.toString();
-    }
 }

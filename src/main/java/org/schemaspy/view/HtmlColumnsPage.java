@@ -35,6 +35,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,7 +60,7 @@ public class HtmlColumnsPage {
         this.mustacheCompiler = mustacheCompiler;
     }
 
-    public void write(Collection<Table> tables, Writer writer) {
+    public void write(Collection<Table> tables, Map<String, Object> parametersMap, Writer writer) {
         Set<TableColumn> indexedColumns = tables.stream()
                 .flatMap(table -> table.getIndexes().stream())
                 .flatMap(tableIndex -> tableIndex.getColumns().stream())
@@ -91,6 +92,7 @@ public class HtmlColumnsPage {
         PageData pageData = new PageData.Builder()
                 .templateName("column.html")
                 .scriptName("column.js")
+                .addAllToScope(parametersMap)
                 .addToScope("tableData", columns.toString(4))
                 .depth(0)
                 .getPageData();

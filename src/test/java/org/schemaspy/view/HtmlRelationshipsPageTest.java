@@ -47,7 +47,7 @@ public class HtmlRelationshipsPageTest {
         StringWriter writer = new StringWriter();
         MustacheSummaryDiagramResults mustacheSummaryDiagramResults = new MustacheSummaryDiagramResults(Collections.emptyList(), new WriteStats(Collections.emptyList()),true, Collections.emptyList(),Collections.singletonList(new OutputException("ERROR")));
 
-        htmlRelationshipsPage.write(mustacheSummaryDiagramResults, writer);
+        htmlRelationshipsPage.write(mustacheSummaryDiagramResults, Collections.emptyMap(), writer);
 
         assertThat(writer.toString()).contains("here were 1 error(s)");
     }

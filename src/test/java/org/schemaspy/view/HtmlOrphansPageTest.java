@@ -41,7 +41,7 @@ public class HtmlOrphansPageTest {
         MustacheCompiler mustacheCompiler = new MustacheCompiler("errorInOrpahns", htmlConfig, dataTableConfig);
         HtmlOrphansPage htmlOrphansPage = new HtmlOrphansPage(mustacheCompiler);
         StringWriter writer = new StringWriter();
-        htmlOrphansPage.write(Collections.emptyList(), false, writer);
+        htmlOrphansPage.write(Collections.emptyList(), false, Collections.emptyMap(), writer);
         assertThat(writer.toString()).contains("Not all diagrams were created");
     }
 

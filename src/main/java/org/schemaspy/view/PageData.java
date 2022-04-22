@@ -18,6 +18,8 @@
  */
 package org.schemaspy.view;
 
+import org.springframework.util.CollectionUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +51,15 @@ public class PageData {
 
         public Builder templateName(String templateName) {
             pageData.templateName = templateName;
+            return this;
+        }
+
+        public Builder addAllToScope(Map<String, Object> valuesMap) {
+            if(CollectionUtils.isEmpty(valuesMap)) {
+                return this;
+            }
+
+            valuesMap.forEach(this::addToScope);
             return this;
         }
 

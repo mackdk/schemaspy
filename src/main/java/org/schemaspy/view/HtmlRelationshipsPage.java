@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.invoke.MethodHandles;
+import java.util.Map;
 
 /**
  * The page that contains the overview entity relationship diagrams.
@@ -49,13 +50,14 @@ public class HtmlRelationshipsPage {
     }
 
     public boolean write(
-            MustacheSummaryDiagramResults results,
-            Writer writer
+        MustacheSummaryDiagramResults results,
+        Map<String, Object> parametersMap, Writer writer
     ) {
         try {
             PageData pageData = new PageData.Builder()
                     .templateName("relationships.html")
                     .scriptName("relationships.js")
+                    .addAllToScope(parametersMap)
                     .addToScope("hasOnlyImpliedRelationships", hasOnlyImpliedRelationships(results))
                     .addToScope("anyRelationships", anyRelationships(results))
                     .addToScope("diagrams", results.getDiagrams())

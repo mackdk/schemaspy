@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The page that contains the all tables that aren't related to others (orphans)
@@ -53,13 +54,14 @@ public class HtmlOrphansPage {
     }
 
     public void write(
-            List<MustacheTableDiagram> orphanDiagrams,
-            boolean allWritten,
-            Writer writer
+        List<MustacheTableDiagram> orphanDiagrams,
+        boolean allWritten,
+        Map<String, Object> parametersMap, Writer writer
     ) {
 
         PageData pageData = new PageData.Builder()
                 .templateName("orphans.html")
+                .addAllToScope(parametersMap)
                 .addToScope("diagrams", orphanDiagrams)
                 .addToScope("allWritten", allWritten)
                 .getPageData();

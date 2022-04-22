@@ -33,6 +33,7 @@ import java.io.Writer;
 import java.lang.invoke.MethodHandles;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -55,11 +56,12 @@ public class HtmlConstraintsPage {
         this.mustacheCompiler = mustacheCompiler;
     }
 
-    public void write(List<ForeignKeyConstraint> constraints, Collection<Table> tables, Writer writer) {
+    public void write(List<ForeignKeyConstraint> constraints, Collection<Table> tables, Map<String, Object> parametersMap, Writer writer) {
 
         PageData pageData = new PageData.Builder()
                 .templateName("constraint.html")
                 .scriptName("constraint.js")
+                .addAllToScope(parametersMap)
                 .addToScope("constraints", constraints)
                 .addToScope("checkConstraints", collectCheckConstraints(tables))
                 .depth(0)

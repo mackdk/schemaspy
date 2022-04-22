@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.invoke.MethodHandles;
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -50,11 +51,12 @@ public class HtmlRoutinesPage {
         this.mustacheCompiler = mustacheCompiler;
     }
 
-    public void write(Collection<Routine> routines, Writer writer) {
+    public void write(Collection<Routine> routines, Map<String, Object> parametersMap, Writer writer) {
 
         PageData pageData = new PageData.Builder()
                 .templateName("routines.html")
                 .scriptName("routines.js")
+                .addAllToScope(parametersMap)
                 .addToScope("routines", routines)
                 .addToScope("md2html", (Function<String,String>) md -> Markdown.toHtml(md, mustacheCompiler.getRootPath(0)))
                 .getPageData();

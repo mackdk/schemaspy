@@ -23,10 +23,12 @@ import org.schemaspy.cli.CommandLineArguments;
 import org.schemaspy.model.Catalog;
 import org.schemaspy.model.Database;
 import org.schemaspy.model.Schema;
+import org.schemaspy.util.AnalyzerUtils;
 import org.schemaspy.util.DataTableConfig;
 
 import java.io.StringWriter;
 import java.util.Collections;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -46,7 +48,9 @@ public class HtmlMainIndexPageTest {
         Database database = mock(Database.class);
         when(database.getSchema()).thenReturn(new Schema("schema"));
         when(database.getCatalog()).thenReturn(new Catalog("catalog"));
-        htmlMainIndexPage.write(database, Collections.emptyList(), Collections.emptyList(), writer);
+
+        Map<String, Object> parametersMap = AnalyzerUtils.buildParametersMap(database, Collections.emptyList(), Collections.emptyList());
+        htmlMainIndexPage.write(Collections.emptyList(), parametersMap, writer);
 
         assertThat(writer.toString()).contains("<p>normal <em>emp</em> <strong>strong</strong></p>");
     }
@@ -64,7 +68,9 @@ public class HtmlMainIndexPageTest {
         Database database = mock(Database.class);
         when(database.getSchema()).thenReturn(new Schema("schema"));
         when(database.getCatalog()).thenReturn(new Catalog("catalog"));
-        htmlMainIndexPage.write(database, Collections.emptyList(), Collections.emptyList(), writer);
+
+        Map<String, Object> parametersMap = AnalyzerUtils.buildParametersMap(database, Collections.emptyList(), Collections.emptyList());
+        htmlMainIndexPage.write(Collections.emptyList(), parametersMap, writer);
 
         assertThat(writer.toString()).doesNotContain("<th align=\"right\" valign=\"bottom\">Rows</th>");
     }
@@ -82,7 +88,9 @@ public class HtmlMainIndexPageTest {
         Database database = mock(Database.class);
         when(database.getSchema()).thenReturn(new Schema("schema"));
         when(database.getCatalog()).thenReturn(new Catalog("catalog"));
-        htmlMainIndexPage.write(database, Collections.emptyList(), Collections.emptyList(), writer);
+
+        Map<String, Object> parametersMap = AnalyzerUtils.buildParametersMap(database, Collections.emptyList(), Collections.emptyList());
+        htmlMainIndexPage.write(Collections.emptyList(), parametersMap, writer);
 
         assertThat(writer.toString()).contains("<th align=\"right\" valign=\"bottom\">Rows</th>");
     }
