@@ -25,12 +25,15 @@ package org.schemaspy.view;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+
+import org.schemaspy.Config;
 import org.schemaspy.util.DataTableConfig;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -63,7 +66,7 @@ public class MustacheCompiler {
 
         HashMap<String, Object> pageScope = new HashMap<>();
         pageScope.put("toFileName", (Function<String,String>) FileNameGenerator::generate);
-        pageScope.put("databaseName", databaseName);
+        pageScope.put("databaseName", Optional.ofNullable(Config.getInstance().getLabel()).orElse(databaseName));
         pageScope.put("paginationEnabled", htmlConfig.isPaginationEnabled());
         pageScope.put("displayNumRows", htmlConfig.isNumRowsEnabled());
         pageScope.put("dataTableConfig", dataTableConfig.getPageScopeMap());

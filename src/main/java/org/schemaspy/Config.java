@@ -96,6 +96,7 @@ public final class Config implements HtmlConfig, GraphvizConfig {
     private String password;
     private Boolean promptForPassword;
     private String db;
+    private String label;
     private String host;
     private Integer port;
     private String meta;
@@ -314,6 +315,19 @@ public final class Config implements HtmlConfig, GraphvizConfig {
         if (db == null)
             db = pullParam("-db");
         return db;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * @return Name of database as supplied with -db or set during multi schema analysis
+     */
+    public String getLabel() {
+        if (label == null)
+            label = pullParam("-label");
+        return label;
     }
 
     public void setSchema(String schema) {
@@ -1607,6 +1621,11 @@ public final class Config implements HtmlConfig, GraphvizConfig {
         value = getDb();
         if (value != null) {
             params.add("-db");
+            params.add(value);
+        }
+        value = getLabel();
+        if (value != null) {
+            params.add("-label");
             params.add(value);
         }
         value = getHost();
